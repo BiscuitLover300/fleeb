@@ -11,6 +11,31 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["UserInfo"]
 collection = db["InfoList"]
 
+
+#This is where we will store login info
+usernames = db["Usernames"]
+passwords = db["Passwords"]
+
+
+
+def signup():
+    username = input("")
+    password = input("")
+
+    new_username = usernames.insert_one(username)
+    new_password = passwords.insert_one(password)
+
+
+def login(username, password):
+        x = 1
+        while(x = 1):
+        if(usernames.find_one(username)):
+            return "welcome, " + username
+            
+        else:
+            return "Incorrect Login. For new users, please click Sign Up."
+            
+
 #This part is for getting the database and collection put onto ur mongo
 sample_data = {"name": "Alice", "age": 30, "city": "New York"}
 collection.insert_one(sample_data)
