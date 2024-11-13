@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        #fleeb {
-            position: fixed; /* or absolute */
+        #fleeb { /*For Welcome to Fleeb at the top of screen*/
+            position: fixed; 
             top: 0;
             left: 50%; /* Centers it horizontally */
             transform: translateX(-50%); /* Adjusts to align with center */
@@ -19,7 +19,7 @@
             text-align: center;
             line-height: 5vh; /* Centers text vertically */
         }
-        body {
+        body { /*Styling for body */
         font-family: Arial, sans-serif;
         display: flex;
         justify-content: center;
@@ -29,7 +29,7 @@
         background-color: #f4f4f4;
     }
 
-    .login-container {
+    .login-container { /*Styling for Login */
         background-color: white;
         padding: 20px;
         border-radius: 8px;
@@ -38,7 +38,7 @@
         text-align: center;
     }
 
-    input {
+    input { /*Styling for input*/
         width: 100%;
         padding: 10px;
         margin: 8px 0;
@@ -46,7 +46,7 @@
         border-radius: 4px;
     }
 
-    button {
+    button { /*Styling for login button */
         width: 100%;
         padding: 10px;
         background-color: red;
@@ -59,41 +59,44 @@
     button:hover {
         background-color: #0056b3;
     }
-    #error-message {
+    #error-message { /*Styling for error message */
         color: red;
         margin-top: 10px;
     }
     </style>
 </head>
 <body>
-    <div id="fleeb">
+    <!-- Header -->
+    <div id="fleeb"> 
         <h1>Welcome To Fleeb</h1>
     </div>
+    <!--Username & Password-->
     <div class="login-container">
         <h2>Login</h2>
         <form id="loginForm">
             <label for="username">Username:</label>
             <input type="text" id="username" required>
-
+            <!--Requires username -->
             <label for="password">Password:</label>
             <input type="password" id="password" required>
-
-            <button type="submit">Login</button>
+            <!-- Requires Password-->
+            <button type="submit">Login</button> 
+            <!-- Login Button -->
         </form>
         <p id="error-message"></p>
 </body>
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    document.getElementById('loginForm').addEventListener('submit', function(event) { //When user hit's login
     event.preventDefault();
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const errorMessage = document.getElementById('error-message');
+    const username = document.getElementById('username').value; //Variable for Username
+    const password = document.getElementById('password').value; //Variable for Password
+    const errorMessage = document.getElementById('error-message'); //Error message
 
     // Simple hard-coded credentials check
-    if (username === 'user' && password === 'password123') {
+    if (username === 'user' && password === 'password123') { //If username == user & password == password123 then lead them to fleeb.html
         window.location.href = 'fleeb.html';
-    } else {
+    } else { //Otherwise throw error message
         errorMessage.textContent = 'Invalid username or password. Please try again.';
     }
 });
