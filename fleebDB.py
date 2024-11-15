@@ -19,7 +19,7 @@ gather = db["loginInfo"]
 
 
 
-
+#this function is how users will set up an account to check out. We could make an option of checkout to make this not mandatory to buy stuff.
  
 def signup():
     
@@ -68,9 +68,14 @@ def signup():
         print("Invalid username. Username must be between 1 and 20 letters with spaces allowed.")
 
 
+
+#this will be the login function on the website that will return the users data to them after they have set up an account
+
 def log_in():
      
     pattern  = r'^[A-Za-z\s]{1,20}$'
+
+    #password_pattern = 
 
     def username_validate(us):
         return bool(re.match(pattern, us))
