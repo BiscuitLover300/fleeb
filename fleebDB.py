@@ -115,12 +115,14 @@ def log_in():
 
             
 
-#This part is for getting the database and collection put onto ur mongo
+#This part is for getting the database and collection put onto ur mongo for the first time
+
 #sample_data = {"name": "Alice", "age": 30, "city": "New York"}
 #collection.insert_one(sample_data)
 #print("Data inserted successfully!")
 
 
 # This will pull the information and display it in ur terminal
+
 #document = collection.find_one({"name": "Alice"})
 #print("Retrieved document:", document)
