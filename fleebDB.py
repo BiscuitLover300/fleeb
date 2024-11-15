@@ -69,23 +69,42 @@ def signup():
 
 
 def log_in():
-        username = input("enter your username: ")
-        password = input("enter your password: ")
-        
-        if(gather.find_one(username) and gather.find_one(password)):
-            return "welcome, " + username
-            
+     
+    pattern  = r'^[A-Za-z\s]{1,20}$'
+
+    def username_validate(us):
+        return bool(re.match(pattern, us))
+
+    username = input("enter your username: ")
+
+    if(username_validate(username) == True):
+
+        username = username.lower()
+
+
+        search = gather.find_one({"username": username}, {"username": 1, "_id": 0})
+        name = search["username"] if search else None
+        if(name ==  username):
+
+
+            password = input("enter your password: ")
+
+            pass_search = gather.find_one({"password": password}, {"password": 1, "_id": 0})
+            word =  pass_search["password"] if search else None
+
+            if(word == password):
+                print("Welcome " + username + "!")
+            else:
+                print("incorrect password, please try again.")
         else:
-            return "Incorrect Login. For new users, please click Sign Up."
-            
+            print("No entry of this user, if you want to make an account, click sign up!")
+    else:
+        print("No vaild user entered, please try again.")
+
         
 
 
-
-
-
-
-signup()
+#signup()
 #log_in()
 
 
