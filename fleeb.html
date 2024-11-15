@@ -1,18 +1,22 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fleeb - Merch Store</title>
     <style>
+        /*Styling for Body */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
-        /* Header */
+        /* Styling for Header */
         #fleeb {
             text-align: center;
             width: 100%;
@@ -26,7 +30,7 @@
             justify-content: center;
         }
 
-        /* Navbar */
+        /* Styling forNavbar */
         .navbar {
             display: flex;
             justify-content: space-around;
@@ -45,11 +49,67 @@
             border-radius: 5px;
         }
 
-        /* Main Content */
+        /* Styling for Main layout */
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Styling for Sidebar */
+        #cart-sidebar {
+            width: 300px;
+            background-color: #f4f4f4;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            overflow-y: auto;
+            transform: translateX(-300px);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #cart-sidebar.open {
+            transform: translateX(0);
+        }
+
+        #cart-sidebar h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        #cart-sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        #cart-sidebar ul li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #cart-sidebar ul li button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 0.3em 0.5em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #cart-sidebar ul li button:hover {
+            background-color: darkred;
+        }
+
+        /* Main Products */
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
+            flex-grow: 1;
             padding: 2rem;
         }
 
@@ -92,6 +152,21 @@
         .product-card button:hover {
             background-color: darkred;
         }
+        #purchase-button {
+            width: 100%;
+            background-color: green;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        #purchase-button:hover {
+            background-color: darkgreen;
+        }
+
     </style>
 </head>
 <body>
@@ -108,54 +183,112 @@
         <a href="https://example.com/contact" target="_blank">Contact</a>
     </div>
 
-    <!-- Main Content -->
-    <div class="container" id="products">
-        <!-- Product 1 -->
-        <div class="product-card">
-            <img src="tshirt.jpg" alt="T-Shirt">
-            <h3>Fleeb T-Shirt</h3>
-            <p>$20.00</p>
-            <a href="https://example.com/tshirt" target="_blank">Buy Now</a>
-        </div>
-        
-        <!-- Product 2 -->
-        <div class="product-card">
-            <img src="hat.jpg" alt="Hat">
-            <h3>Fleeb Hat</h3>
-            <p>$15.00</p>
-            <a href="https://example.com/hat" target="_blank">Buy Now</a>
-        </div>
-        
-        <!-- Product 3 -->
-        <div class="product-card">
-            <img src="mug.jpg" alt="Mug">
-            <h3>Fleeb Mug</h3>
-            <p>$10.00</p>
-            <a href="https://example.com/mug" target="_blank">Buy Now</a>
-        </div>
-         <!-- Product 4 - Fleeb Pants -->
-         <div class="product-card">
-            <img src="pants.jpg" alt="Pants">
-            <h3>Fleeb Pants</h3>
-            <p>$30.00</p>
-            <a href="https://example.com/pants" target="_blank">Buy Now</a>
+    <!-- Main Layout -->
+    <div class="main-content">
+        <!-- Cart Sidebar -->
+        <div id="cart-sidebar">
+            <h2>Shopping Cart</h2>
+            <ul id="cart-items"></ul>
+            <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+            <button id="purchase-button" style="display: none;">Proceed to Checkout</button>
         </div>
 
-        <!-- Product 5 - Fleeb Watch -->
-        <div class="product-card">
-            <img src="watch.jpg" alt="Watch">
-            <h3>Fleeb Watch</h3>
-            <p>$50.00</p>
-            <a href="https://example.com/watch" target="_blank">Buy Now</a>
-        </div>
+        <!-- Main Content -->
+        <div class="container" id="products">
+            <!-- Product 1 -->
+            <div class="product-card" data-name="Fleeb T-Shirt" data-price="20">
+                <img src="tshirt.jpg" alt="T-Shirt">
+                <h3>Fleeb T-Shirt</h3>
+                <p>$20.00</p>
+                <button class="add-to-cart">Buy Now</button>
+            </div>
 
-        <!-- Product 6 - Fleeb Keychain -->
-        <div class="product-card">
-            <img src="keychain.jpg" alt="Keychain">
-            <h3>Fleeb Keychain</h3>
-            <p>$5.00</p>
-            <a href="https://example.com/keychain" target="_blank">Buy Now</a>
+            <!-- Product 2 -->
+            <div class="product-card" data-name="Fleeb Hat" data-price="15">
+                <img src="hat.jpg" alt="Hat">
+                <h3>Fleeb Hat</h3>
+                <p>$15.00</p>
+                <button class="add-to-cart">Buy Now</button>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card" data-name="Fleeb Mug" data-price="10">
+                <img src="mug.jpg" alt="Mug">
+                <h3>Fleeb Mug</h3>
+                <p>$10.00</p>
+                <button class="add-to-cart">Buy Now</button>
+            </div>
+            <!-- Product 4 -->
+            <div class="product-card" data-name="Fleeb Pants" data-price="30">
+                <img src="pants.jpg" alt="Pants">
+                <h3>Fleeb Pants</h3>
+                <p>$30.00</p>
+            <button class="add-to-cart">Buy Now</button>
+            </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartItemsList = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const purchaseButton = document.getElementById('purchase-button');
+    
+        let cart = [];
+    
+        function updateCart() {
+            cartItemsList.innerHTML = '';
+            let total = 0;
+    
+            cart.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`;
+    
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', () => {
+                    cart.splice(index, 1);
+                    updateCart();
+                });
+    
+                li.appendChild(removeButton);
+                cartItemsList.appendChild(li);
+                total += item.price * item.quantity;
+            });
+    
+            cartTotal.textContent = total.toFixed(2);
+    
+            if (cart.length > 0) {
+                purchaseButton.style.display = 'block';
+            } else {
+                purchaseButton.style.display = 'none';
+                cartSidebar.classList.remove('open');
+            }
+        }
+    
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const productCard = button.closest('.product-card');
+                const name = productCard.getAttribute('data-name');
+                const price = parseFloat(productCard.getAttribute('data-price'));
+    
+                const existingItem = cart.find(item => item.name === name);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ name, price, quantity: 1 });
+                }
+    
+                updateCart();
+                cartSidebar.classList.add('open');
+            });
+        });
+    
+        purchaseButton.addEventListener('click', () => {
+            window.location.href = 'https://example.com/checkout'; // Replace with your checkout URL
+        });
+    });
+</script>    
 </body>
 </html>
