@@ -178,7 +178,7 @@
     <!-- Navbar -->
     <div class="navbar">
         <a href="https://example.com/home" target="_blank">Home</a>
-        <a href="https://example.com/products" target="_blank">Products</a>
+        <a href="fleeb.html" target="_blank">Products</a>
         <a href="https://example.com/about" target="_blank">About</a>
         <a href="https://example.com/contact" target="_blank">Contact</a>
     </div>
@@ -237,56 +237,56 @@
     
         let cart = [];
     
-        function updateCart() {
+        function updateCart() { //Function to update cart
             cartItemsList.innerHTML = '';
             let total = 0;
     
-            cart.forEach((item, index) => {
+            cart.forEach((item, index) => { //For each item in cart
                 const li = document.createElement('li');
-                li.textContent = `${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`;
+                li.textContent = `${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`; //adds item price & name & amount
     
-                const removeButton = document.createElement('button');
+                const removeButton = document.createElement('button'); //Remove button 
                 removeButton.textContent = 'Remove';
-                removeButton.addEventListener('click', () => {
+                removeButton.addEventListener('click', () => { //On click add item to the cart & update cart
                     cart.splice(index, 1);
                     updateCart();
                 });
     
                 li.appendChild(removeButton);
                 cartItemsList.appendChild(li);
-                total += item.price * item.quantity;
+                total += item.price * item.quantity; //Adds to the total based on item price & quantity
             });
     
             cartTotal.textContent = total.toFixed(2);
     
-            if (cart.length > 0) {
+            if (cart.length > 0) { //If no items in cart, get rid of sidebar
                 purchaseButton.style.display = 'block';
-            } else {
+            } else { //Else display as normal
                 purchaseButton.style.display = 'none';
                 cartSidebar.classList.remove('open');
             }
         }
     
-        addToCartButtons.forEach(button => {
+        addToCartButtons.forEach(button => { //For each time add to cart button is clicked
             button.addEventListener('click', () => {
                 const productCard = button.closest('.product-card');
                 const name = productCard.getAttribute('data-name');
                 const price = parseFloat(productCard.getAttribute('data-price'));
     
                 const existingItem = cart.find(item => item.name === name);
-                if (existingItem) {
+                if (existingItem) { //If item already exists, add to the item quantity
                     existingItem.quantity++;
-                } else {
+                } else { //Else quantity is one, display name, price, & quantity
                     cart.push({ name, price, quantity: 1 });
                 }
     
-                updateCart();
-                cartSidebar.classList.add('open');
+                updateCart(); //Update the cart
+                cartSidebar.classList.add('open'); //opens side bar
             });
         });
     
-        purchaseButton.addEventListener('click', () => {
-            window.location.href = 'https://example.com/checkout'; // Replace with your checkout URL
+        purchaseButton.addEventListener('click', () => { //On click of purchase take them to checkout site
+            window.location.href = 'https://example.com/checkout'; 
         });
     });
 </script>    
