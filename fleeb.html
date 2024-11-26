@@ -28,7 +28,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: fixed; /* Fix the header at the top */
+            top: 0;
+            z-index: 1100; /* Ensure it's above the navbar */
         }
+
 
         /* Styling forNavbar */
         .navbar {
@@ -36,6 +40,10 @@
             justify-content: space-around;
             background-color: #333;
             padding: 1rem;
+            position: fixed;
+            top: 10vh; /* Place navbar below the header */
+            width: 100%;
+            z-index: 1000; /* Ensure it's above the main content but below the header */
         }
 
         .navbar a {
@@ -51,26 +59,32 @@
 
         /* Styling for Main layout */
         .main-content {
-            display: flex;
-            flex-grow: 1;
-            overflow: hidden;
+         margin-top: calc(10vh + 70vh); 
+         display: flex;
+         flex-grow: 1;
+         overflow: hidden;
         }
 
         /* Styling for Sidebar */
         #cart-sidebar {
-            width: 300px;
+            position: fixed; /* Float over main content */
+            top: calc(10vh + 70px); /* Start below the header and navbar */
+            left: -300px; /* Hide it off-screen initially */
+            width: 250px;
+            height: calc(100% - (10vh + 70px)); /* Adjust height to exclude header and navbar */
             background-color: #f4f4f4;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
             padding: 1rem;
             overflow-y: auto;
-            transform: translateX(-300px);
-            transition: transform 0.3s ease-in-out;
+            transition: left 0.3s ease-in-out; /* Smooth transition for visibility */
             display: flex;
             flex-direction: column;
+            z-index: 999; /* Ensure it's beneath the header and navbar */
         }
+
         
         #cart-sidebar.open {
-            transform: translateX(0);
+            left:0;
         }
 
         #cart-sidebar h2 {
@@ -108,9 +122,10 @@
         .container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
-            flex-grow: 1;
+            justify-content: flex-start; /* Align items to the left */
+            align-items: flex-start;
             padding: 2rem;
+            transition: margin-left 0.3s ease-in-out; /* Smooth transition for movement */
         }
 
         .product-card {
@@ -137,6 +152,12 @@
         .product-card p {
             font-size: 1em;
             color: #333;
+        }
+        .main-content {
+         margin-top: calc(10vh + 70px); /* Add space for header (10vh) and navbar (70px) */
+         display: flex;
+         flex-grow: 1;
+         overflow: hidden;
         }
 
         .product-card button {
@@ -165,6 +186,10 @@
 
         #purchase-button:hover {
             background-color: darkgreen;
+        }
+        /* Shift the product cards */
+        .container.shift-right {
+            margin-left: 300px;
         }
 
     </style>
@@ -229,66 +254,69 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const cartSidebar = document.getElementById('cart-sidebar');
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const cartItemsList = document.getElementById('cart-items');
-        const cartTotal = document.getElementById('cart-total');
-        const purchaseButton = document.getElementById('purchase-button');
-    
-        let cart = [];
-    
-        function updateCart() { //Function to update cart
-            cartItemsList.innerHTML = '';
-            let total = 0;
-    
-            cart.forEach((item, index) => { //For each item in cart
-                const li = document.createElement('li');
-                li.textContent = `${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`; //adds item price & name & amount
-    
-                const removeButton = document.createElement('button'); //Remove button 
-                removeButton.textContent = 'Remove';
-                removeButton.addEventListener('click', () => { //On click add item to the cart & update cart
-                    cart.splice(index, 1);
-                    updateCart();
-                });
-    
-                li.appendChild(removeButton);
-                cartItemsList.appendChild(li);
-                total += item.price * item.quantity; //Adds to the total based on item price & quantity
+    const cartSidebar = document.getElementById('cart-sidebar'); //Cart side bar
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');//Add to cart
+    const cartItemsList = document.getElementById('cart-items'); //Cart items
+    const cartTotal = document.getElementById('cart-total');// Cart-total
+    const purchaseButton = document.getElementById('purchase-button'); //purchase button
+    const container = document.querySelector('.container'); // Product container
+
+    let cart = [];
+
+    function updateCart() { //Updates cart every time you click 
+        cartItemsList.innerHTML = '';
+        let total = 0;
+
+        cart.forEach((item, index) => {// Goes through the list of item
+            const li = document.createElement('li');
+            li.textContent = `${item.name} - $${item.price.toFixed(2)} x ${item.quantity}`; //Prints out item & item quantity
+
+            const removeButton = document.createElement('button');//Remove button
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => { 
+                cart.splice(index, 1); //Removes an item
+                updateCart(); //Updates cart
             });
-    
-            cartTotal.textContent = total.toFixed(2);
-    
-            if (cart.length > 0) { //If no items in cart, get rid of sidebar
-                purchaseButton.style.display = 'block';
-            } else { //Else display as normal
-                purchaseButton.style.display = 'none';
-                cartSidebar.classList.remove('open');
-            }
-        }
-    
-        addToCartButtons.forEach(button => { //For each time add to cart button is clicked
-            button.addEventListener('click', () => {
-                const productCard = button.closest('.product-card');
-                const name = productCard.getAttribute('data-name');
-                const price = parseFloat(productCard.getAttribute('data-price'));
-    
-                const existingItem = cart.find(item => item.name === name);
-                if (existingItem) { //If item already exists, add to the item quantity
-                    existingItem.quantity++;
-                } else { //Else quantity is one, display name, price, & quantity
-                    cart.push({ name, price, quantity: 1 });
-                }
-    
-                updateCart(); //Update the cart
-                cartSidebar.classList.add('open'); //opens side bar
-            });
+
+            li.appendChild(removeButton);
+            cartItemsList.appendChild(li);
+            total += item.price * item.quantity; //Adds to the total
         });
-    
-        purchaseButton.addEventListener('click', () => { //On click of purchase take them to checkout site
-            window.location.href = 'https://example.com/checkout'; 
+
+        cartTotal.textContent = total.toFixed(2);
+
+        if (cart.length > 0) { //If cart length is above zero 
+            purchaseButton.style.display = 'block';
+            cartSidebar.classList.add('open'); // Open the sidebar
+            container.classList.add('shift-right'); // Shift products right
+        } else {
+            purchaseButton.style.display = 'none';
+            cartSidebar.classList.remove('open'); // Close the sidebar
+            container.classList.remove('shift-right'); // Reset products to the left
+        }
+    }
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => { //Everytime you click 
+            const productCard = button.closest('.product-card');
+            const name = productCard.getAttribute('data-name');
+            const price = parseFloat(productCard.getAttribute('data-price'));
+
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) { //Add to the item quantity if there is more than one item
+                existingItem.quantity++;
+            } else { //Otherwise item  quantity is one
+                cart.push({ name, price, quantity: 1 });
+            }
+
+            updateCart();
         });
     });
+
+    purchaseButton.addEventListener('click', () => { //Example checkout
+        window.location.href = 'https://example.com/checkout';
+    });
+});
 </script>    
 </body>
 </html>
