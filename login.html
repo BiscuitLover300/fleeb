@@ -87,19 +87,38 @@
         <p>Need to create an account? <a href="/signup.html">Sign up here</a>.</p>
 </body>
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) { //When user hit's login
-    event.preventDefault();
+    document.getElementById('loginForm').addEventListener('submit', async function(event) { 
+        event.preventDefault();
 
-    const username = document.getElementById('username').value; //Variable for Username
-    const password = document.getElementById('password').value; //Variable for Password
-    const errorMessage = document.getElementById('error-message'); //Error message
+        const username = document.getElementById('username').value; //Username
+        const password = document.getElementById('password').value; //Password
+        const errorMessage = document.getElementById('error-message'); //error message
 
-    // Simple hard-coded credentials check
-    if (username === 'user' && password === 'password123') { //If username == user & password == password123 then lead them to fleeb.html
-        window.location.href = 'fleeb.html';
-    } else { //Otherwise throw error message
-        errorMessage.textContent = 'Invalid username or password. Please try again.';
-    }
-});
+        try {
+            // Send login details to the backend
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) { //If response is okay, then pull data
+                const data = await response.json();
+
+                if (data.success) {
+                    // Redirect to the next page on successful login
+                    window.location.href = 'fleeb.html';
+                } else {
+                    // Display error message from the server
+                    errorMessage.textContent = data.message || 'Login failed. Please try again.';
+                }
+            } else {
+                errorMessage.textContent = 'Server error. Please try again later.';
+            }
+        } catch (error) { //Catches error if database is not working correctly
+            errorMessage.textContent = 'An error occurred. Please try again.';
+            console.error('Error:', error);
+        }
+    });
 </script>
 </html>
