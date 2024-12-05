@@ -93,10 +93,10 @@
     document.getElementById('signupForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-        const errorMessage = document.getElementById('error-message');
+        const username = document.getElementById('username').value; //Username
+        const password = document.getElementById('password').value; //Password
+        const confirmPassword = document.getElementById('confirm_password').value; //Confirm password
+        const errorMessage = document.getElementById('error-message'); //Error message
 
         // Ensure passwords match
         if (password !== confirmPassword) {
@@ -104,18 +104,27 @@
             return;
         }
 
-        // Send signup data to Flask backend
-        const response = await fetch('/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
+        try {
+            // Send signup data to Flask backend
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
 
-        const result = await response.json();
-        if (result.success) {
-            window.location.href = '/login'; // Redirect to login page
-        } else {
-            errorMessage.textContent = result.message; // Display error message
+            if (response.ok) {//If response to server is okay
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = '/login'; // Redirect to login page
+                } else {
+                    errorMessage.textContent = result.message; // Display error message
+                }
+            } else { //Throws error if cannot connect to server
+                errorMessage.textContent = 'Server error. Please try again.';
+            }
+        } catch (error) { //Catches any error with flask backend
+            errorMessage.textContent = 'An error occurred. Please try again.';
+            console.error('Error:', error);
         }
     });
 </script>
