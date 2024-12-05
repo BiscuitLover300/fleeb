@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Fleeb T-Shirt",
+    "price": 20.00,
+    "image": "tshirt.jpg"
+  },
+  {
+    "name": "Fleeb Hat",
+    "price": 15.00,
+    "image": "hat.jpg"
+  },
+  {
+    "name": "Fleeb Mug",
+    "price": 10.00,
+    "image": "mug.jpg"
+  },
+  {
+    "name": "Fleeb Pants",
+    "price": 30.00,
+    "image": "pants.jpg"
+  }
+]
