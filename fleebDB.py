@@ -125,6 +125,44 @@ def get_products():
 
 
 
+#this is for adding items to the cart
+@app.route('/cart', methods=['POST'])
+def add_to_cart():
+    try:
+        data = request.json
+        username = data.get('username')
+        item = data.get('item')
+
+        if not username or not item:
+            return jsonify({'success': False, 'message': 'Username or item is missing.'}), 400
+
+        # Update the user's cart in the database
+        result = db['loginInfo'].update_one(
+            {'username': username},
+            {'$push': {'cart': item}}
+        )
+        if result.matched_count == 0:
+            return jsonify({'success': False, 'message': 'User not found.'}), 404
+
+        return jsonify({'success': True, 'message': 'Item added to cart.'}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
+
+
+
+#this one is for fetching the prexisting cart
+@app.route('/cart/<username>', methods=['GET'])
+def get_cart(username):
+    try:
+        user = db['loginInfo'].find_one({'username': username}, {'_id': 0, 'cart': 1})
+        if not user:
+            return jsonify({'success': False, 'message': 'User not found.'}), 404
+
+        return jsonify({'success': True, 'cart': user.get('cart', [])}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
+
+
 
 #next we will put in the cart and card information storing system
 #the card information will be ran through a complex hash to cramble the data for integrity 

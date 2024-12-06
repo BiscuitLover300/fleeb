@@ -18,5 +18,10 @@
     "name": "Fleeb Pants",
     "price": 30.00,
     "image": "pants.jpg"
+  },
+  {
+    "name": "Fleeb Crowbar",
+    "price": 1000.00,
+    "image": "Crowbar.jpg"
   }
 ]
