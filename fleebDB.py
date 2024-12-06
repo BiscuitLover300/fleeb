@@ -5,8 +5,10 @@ import re
 from flask_cors import CORS
 
 
+
 app = Flask(__name__)
 CORS(app)
+
 
 
 # MongoDB Connections
@@ -14,10 +16,13 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client['UserInfo']  # Database
 collection = db['loginInfo']  # Collection
 
+
+
 #username setup requirements
 def username_validate(username):
     pattern = r'^[A-Za-z0-9]{3,20}$'
     return bool(re.match(pattern, username))
+
 
 
 #route for the signup process on signup.html
@@ -53,6 +58,9 @@ def signup():
     except Exception as e:
         return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
     
+
+
+
 #route for the login process on login.html
 @app.route('/login', methods=['POST'])
 def login():
@@ -78,6 +86,10 @@ def login():
     except Exception as e:
         return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
 
+
+
+
+#next we will put in the cart and card information storing system
 
 
 if __name__ == '__main__':
