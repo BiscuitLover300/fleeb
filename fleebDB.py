@@ -1,41 +1,84 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
+import json
 import re
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
-# MongoDB setup
+
+# MongoDB Connections
 client = MongoClient("mongodb://localhost:27017/")
-db = client["UserInfo"]
-gather = db["loginInfo"]
+db = client['UserInfo']  # Database
+collection = db['loginInfo']  # Collection
 
-# Function to validate the username (same as your earlier logic)
+#username setup requirements
 def username_validate(username):
-    pattern = r'^[A-Za-z\s]{1,20}$'
+    pattern = r'^[A-Za-z0-9]{3,20}$'
     return bool(re.match(pattern, username))
 
-# Route for handling the signup
+
+#route for the signup process on signup.html
 @app.route('/signup', methods=['POST'])
 def signup():
-    data = request.get_json()  # Get the JSON data from the request
-    username = data.get('username', '').strip().lower()  # Clean and lowercased username
-    password = data.get('password', '').strip()
+    try:
+        # Parse JSON data
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
 
-    # Validate username
-    if not username_validate(username):
-        return jsonify({'success': False, 'message': 'Invalid username. It must be between 1 and 20 characters and contain only letters and spaces.'})
+        
+        if not username or not username_validate(username):
+            return jsonify({'success': False, 'message': 'Username must be between 3 and 20 characters long and contain only letters and numbers.'}), 400
+        
+        #strengthen this
+        if not password or len(password) < 6:
+            return jsonify({'success': False, 'message': 'Password must be at least 6 characters long.'}), 400
 
-    # Check if the username already exists in the database
-    existing_user = gather.find_one({"username": username})
-    if existing_user:
-        return jsonify({'success': False, 'message': 'This username is already taken.'})
+        # Check if username already exists
+        if collection.find_one({'username': username}):
+            return jsonify({'success': False, 'message': 'Username already exists.'}), 409
 
-    # If username is valid and doesn't exist, add to database
-    new_user = {"username": username, "password": password}
-    gather.insert_one(new_user)
+        # Save to database
+        user_data = {
+            "username": username,
+            "password": password  # For production, hash passwords before saving
+        }
+        collection.insert_one(user_data)
 
-    return jsonify({'success': True, 'message': 'Account created successfully!'})
+        return jsonify({'success': True, 'message': 'User registered successfully!'}), 201
 
-# Run the Flask app
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
+    
+#route for the login process on login.html
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            return jsonify({'success': False, 'message': 'Username and password are required.'}), 400
+
+        # Find the user in the database
+        user = collection.find_one({'username': username})
+        if not user:
+            return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401
+
+        # Validate password
+        if user['password'] != password:  #we need to add input validation to this
+            return jsonify({'success': False, 'message': 'Invalid username or password.'}), 401
+
+        return jsonify({'success': True, 'message': 'Login successful!'}), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

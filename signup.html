@@ -106,7 +106,7 @@
 
         try {
             // Send signup data to Flask backend
-            const response = await fetch('/signup', {
+            const response = await fetch('http://127.0.0.1:5000/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -115,7 +115,7 @@
             if (response.ok) {//If response to server is okay
                 const result = await response.json();
                 if (result.success) {
-                    window.location.href = '/login'; // Redirect to login page
+                    window.location.href = '/login.html'; // Redirect to login page
                 } else {
                     errorMessage.textContent = result.message; // Display error message
                 }
