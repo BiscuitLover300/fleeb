@@ -254,6 +254,42 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+    // Username display logic
+    const usernameDisplay = document.createElement('div');
+    usernameDisplay.id = 'username-display';
+    usernameDisplay.style.position = 'absolute';
+    usernameDisplay.style.top = '10px';
+    usernameDisplay.style.right = '10px';
+    usernameDisplay.style.color = 'white';
+    usernameDisplay.style.fontWeight = 'bold';
+
+    document.body.appendChild(usernameDisplay);
+
+    const token = localStorage.getItem('sessionToken');
+    if (!token) {
+        usernameDisplay.textContent = 'Guest';
+        return;
+    }
+
+    fetch('http://127.0.0.1:5000/user', {
+        headers: {
+            'Authorization': token
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            usernameDisplay.textContent = `Logged in as: ${data.username}`;
+        } else {
+            usernameDisplay.textContent = 'Guest';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching username:', error);
+        usernameDisplay.textContent = 'Guest';
+    });
+    
     const cartSidebar = document.getElementById('cart-sidebar');
     const cartItemsList = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
@@ -266,7 +302,7 @@
     }
 
     // Fetch products from the backend
-    fetch('/products')
+    fetch('http://127.0.0.1:5000/products')
         .then(response => {
             if (!response.ok) { //If response is not good throw error
                 throw new Error(`Failed to fetch products: ${response.statusText}`);
