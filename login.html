@@ -106,6 +106,7 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    localStorage.setItem('sessionToken', data.token); // Save the token
                     // Redirect to the next page on successful login
                     window.location.href = 'fleeb.html';
                 } else {
