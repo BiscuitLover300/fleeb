@@ -4,6 +4,7 @@ import json
 import re
 from flask_cors import CORS
 import uuid
+import os
 
 
 
@@ -108,6 +109,18 @@ def get_user():
 
     except Exception as e:
         return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
+    
+
+@app.route('/products', methods=['GET'])
+def get_products():
+    try:
+        # Load product data from the JSON file
+        json_file_path = os.path.join(os.path.dirname(__file__), 'products.json')
+        with open(json_file_path, 'r') as file:
+            products = json.load(file)
+        return jsonify(products), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'An error occurred while fetching products.', 'error': str(e)}), 500
 
 
 
