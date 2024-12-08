@@ -255,42 +255,6 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-
-    // Username display logic
-    const usernameDisplay = document.createElement('div');
-    usernameDisplay.id = 'username-display';
-    usernameDisplay.style.position = 'absolute';
-    usernameDisplay.style.top = '10px';
-    usernameDisplay.style.right = '10px';
-    usernameDisplay.style.color = 'white';
-    usernameDisplay.style.fontWeight = 'bold';
-
-    document.body.appendChild(usernameDisplay);
-
-    const token = localStorage.getItem('sessionToken');
-    if (!token) {
-        usernameDisplay.textContent = 'Guest';
-        return;
-    }
-
-    fetch('http://127.0.0.1:5000/user', {
-        headers: {
-            'Authorization': token
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            usernameDisplay.textContent = `Logged in as: ${data.username}`;
-        } else {
-            usernameDisplay.textContent = 'Guest';
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching username:', error);
-        usernameDisplay.textContent = 'Guest';
-    });
-
     const cartSidebar = document.getElementById('cart-sidebar');
     const cartItemsList = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
@@ -328,7 +292,7 @@
                     `; //Displays product name & info
 
                     productCard.querySelector('.add-to-cart').addEventListener('click', () => { //add to cart button
-                        fetch('/cart', { //fetches the product
+                        fetch('http://127.0.0.1:5000/cart', { //fetches the product
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ name: product.name, price: product.price })
@@ -345,7 +309,7 @@
         });
 
     function updateCart() { //Updates the cart
-        fetch('/cart') //fetches cart from database
+        fetch('http://127.0.0.1:5000/cart<username>') //fetches cart from database
             .then(response => response.json())
             .then(cart => {
                 cartItemsList.innerHTML = '';
@@ -358,7 +322,7 @@
                     const removeButton = document.createElement('button'); //Remove button
                     removeButton.textContent = 'Remove';
                     removeButton.addEventListener('click', () => { //On click of remove button
-                        fetch('/cart', { //fetches & deletes from database
+                        fetch('http://127.0.0.1:5000/cart', { //fetches & deletes from database
                             method: 'DELETE',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ name: item.name })

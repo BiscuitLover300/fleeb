@@ -28,6 +28,12 @@ def username_validate(username):
     pattern = r'^[A-Za-z0-9]{3,20}$'
     return bool(re.match(pattern, username))
 
+#password setup requirements
+def password_validate(password):
+    pattern = r'^[A-Za-z0-9]{10,20}$'
+    return bool(re.match(pattern, password))
+
+
 
 
 #route for the signup process on signup.html
@@ -40,11 +46,11 @@ def signup():
         password = data.get('password')
 
         #username validation for creating your account
-        if not username or not username_validate(username):
+        if not username_validate(username):
             return jsonify({'success': False, 'message': 'Username must be between 3 and 20 characters long and contain only letters and numbers.'}), 400
         
-        #strengthen this in the future for more security
-        if not password or len(password) < 6:
+        
+        if not password_validate(password):
             return jsonify({'success': False, 'message': 'Password must be at least 6 characters long.'}), 400
         #after the password has been made, we will hash it through a system that will only be kept in this code.
 
@@ -129,22 +135,31 @@ def get_products():
 @app.route('/cart', methods=['POST'])
 def add_to_cart():
     try:
-        data = request.json
-        username = data.get('username')
+        # Retrieve the token from the headers
+        token = request.headers.get('Authorization')
+        if not token or token not in sessions:
+            return jsonify({'success': False, 'message': 'Unauthorized. Please log in again.'}), 401
+
+        # Decode the session to get the username
+        username = sessions[token]
+        data = request.get_json()
         item = data.get('item')
 
-        if not username or not item:
-            return jsonify({'success': False, 'message': 'Username or item is missing.'}), 400
+        if not item:
+            return jsonify({'success': False, 'message': 'Item is required.'}), 400
 
         # Update the user's cart in the database
-        result = db['loginInfo'].update_one(
+        result = collection.update_one(
             {'username': username},
-            {'$push': {'cart': item}}
+            {'$push': {'cart': item}},  # Add the item to the cart array
+            upsert=True  # Ensure the document exists
         )
+
         if result.matched_count == 0:
             return jsonify({'success': False, 'message': 'User not found.'}), 404
 
         return jsonify({'success': True, 'message': 'Item added to cart.'}), 200
+
     except Exception as e:
         return jsonify({'success': False, 'message': 'An error occurred.', 'error': str(e)}), 500
 
