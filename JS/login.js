@@ -1,20 +1,13 @@
-document.getElementById('signupForm').addEventListener('submit', async function (event) {
+ocument.getElementById('loginForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const username = document.getElementById('username').value.trim(); // Trim whitespace
     const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm_password').value;
     const errorMessage = document.getElementById('error-message');
 
-    // Ensure passwords match
-    if (password !== confirmPassword) {
-        errorMessage.textContent = 'Passwords do not match. Please try again.';
-        return;
-    }
-
     try {
-        // Send signup data to Flask backend
-        const response = await fetch('/signup', { // Update URL if hosted
+        // Send login data to Flask backend
+        const response = await fetch('/login', { // Update URL if hosted
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -23,11 +16,11 @@ document.getElementById('signupForm').addEventListener('submit', async function 
         if (response.ok) {
             const result = await response.json();
             if (result.success) {
-                // Redirect to login page on success
-                window.location.href = '/login';
+                // Redirect to fleeb on successful login
+                window.location.href = '/fleeb'; 
             } else {
                 // Show error message from server
-                errorMessage.textContent = result.message;
+                errorMessage.textContent = result.message || 'Invalid username or password.';
             }
         } else {
             // Generic server error message
