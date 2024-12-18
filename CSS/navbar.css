@@ -1,0 +1,22 @@
+/* Styling forNavbar */
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 1rem;
+    position: fixed;
+    top: 10vh; /* Place navbar below the header */
+    width: 100%;
+    z-index: 1000; /* Ensure it's above the main content but below the header */
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.navbar a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
