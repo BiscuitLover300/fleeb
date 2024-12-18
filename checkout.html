@@ -4,63 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fleeb - Checkout</title>
-    <style>
-        body { /*Styling for body */
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
-        }
-
-        .checkout-container { /*Styling for checkout boxes */
-            max-width: 600px;
-            margin: 2rem auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 { /*Styling for header*/
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin: 0.5rem 0 0.2rem;
-            font-weight: bold;
-        }
-
-        input, select {
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        button {
-            padding: 0.8rem;
-            background-color: green;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        button:hover {
-            background-color: darkgreen;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" type="text/css" href="checkout.css">
 <body>
     <div class="checkout-container">
         <h1>Checkout</h1>
@@ -97,32 +41,6 @@
             <button type="submit">Submit Order</button>
         </form>
     </div>
-    <script>
-        document.getElementById('checkout-form').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-
-            // Collect form data
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData);
-
-            try { //Tries to catch data from database
-                const response = await fetch('http://localhost:5000/checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-
-                if (response.ok) { //If response is okay, then order sucessful
-                    alert('Order submitted successfully!');
-                } else { //Prints out error otherwise
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (error) { //Catches error 
-                console.error('Error submitting form:', error);
-                alert('Failed to submit the order. Please try again later.');
-            }
-        });
-    </script>
 </body>
+<script src="checkout.js"></script> <!--Checks backend to make sure info is valid-->
 </html>
