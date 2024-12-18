@@ -4,77 +4,34 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Fleeb - About</title>
-        <style>
-            #fleeb { /*For Welcome to Fleeb at the top of screen*/
-                position: fixed; 
-                top: 0;
-                left: 50%; /* Centers it horizontally */
-                transform: translateX(-50%); /* Adjusts to align with center */
-                width: 100%;
-                height: 10vh;
-                background-color: red;
-                font-family: 'Courier New', Courier, monospace;
-                font-weight: bold;
-                color: white;
-                text-align: center;
-                line-height: 5vh; /* Centers text vertically */
-            }
-            body { /*Styling for body */
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-    
-        .about-info { /*Styling for Login */
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
-        }
-    
-        input { /*Styling for input*/
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-    
-        button { /*Styling for login button */
-            width: 100%;
-            padding: 10px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    
-        button:hover {
-            background-color: #0056b3;
-        }
-        #error-message { /*Styling for error message */
-            color: red;
-            margin-top: 10px;
-        }
-        </style>
+        <link rel="stylesheet" type="text/css" href="header.css">
+        <link rel="stylesheet" type="text/css" href="navbar.css">
     </head> 
+    <style> 
+    .about-info { 
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        text-align: center;
+    }
+    </style>
     <body>
         <!-- Header -->
         <div id="fleeb"> 
             <h1>Welcome To Fleeb</h1>
         </div>
+        <div class="navbar">
+            <a href="https://example.com/home" target="_blank">Home</a>
+            <a href="fleeb.html" target="_blank">Products</a>
+            <a href="https://example.com/about" target="_blank">About</a>
+            <a href="https://example.com/contact" target="_blank">Contact</a>
+        </div>
         <!--About our Shop-->
         <div class="about-info">
             <h2>Store Front Story</h2>
-            <h3>This is just a test storefront that we built because we thought it would be fun and something we would'nt noramlly do </h3>
-
+            <h3>This is just a test storefront that we built because we thought it would be fun and something we wouldn't normally do </h3>
         </div>
     </body>
 </html>
