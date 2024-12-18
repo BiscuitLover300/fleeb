@@ -7,7 +7,7 @@ ocument.getElementById('loginForm').addEventListener('submit', async function (e
 
     try {
         // Send login data to Flask backend
-        const response = await fetch('/login', { // Update URL if hosted
+        const response = await fetch('http://127.0.0.1:5000/login', { // Update URL if hosted
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
