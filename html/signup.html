@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleeb - Sign Up</title>
+    <link rel="stylesheet" type="text/css" href="header.css">
+    <link rel="stylesheet" type="text/css" href="account.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="fleeb"> 
+        <h1>Welcome To Fleeb</h1>
+    </div>
+    <!-- Sign Up Form -->
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter password" required>
+            
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" placeholder="Confirm password" required>
+            
+            <button type="submit">Sign Up</button>
+            
+            <p id="error-message" style="color: red;"></p>
+        </form>
+        
+        <p id="error-message"></p>
+        <p>Already have an account? <a href="/login.html">Log in here</a>.</p>
+    </div>
+</body>
+<script src="../JS/signup.js"></script> <!--Signup functionality-->
+</html>
