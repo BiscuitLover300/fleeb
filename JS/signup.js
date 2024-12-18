@@ -14,7 +14,7 @@ document.getElementById('signupForm').addEventListener('submit', async function 
 
     try {
         // Send signup data to Flask backend
-        const response = await fetch('/signup', { // Update URL if hosted
+        const response = await fetch('http://127.0.0.1:5000/signup', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
